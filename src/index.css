@@ -1,0 +1,50 @@
+html{
+  background: url('/images/background.jpg') repeat-y;
+  background-size: 100%;
+  background-position: bottom;
+  background-color: #005078;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+footer{
+  position:absolute;
+   bottom:0;
+   width:100%;
+   height:60px;   
+}
+
+.page-content{
+  padding: 10;
+  margin-bottom: 20
+}
+
+.employees-container{
+  padding: 20px;
+  margin: 60px 0
+}
+
+.employees-container h5 {
+  margin:20px 0;
+}
+
+form {
+  padding: 20px;
+  margin: 60px 0;
+}
+
+form button, form h5 {
+  margin:20px 0;
+}
+
+
+.card-content{
+  background: #fff
+}
