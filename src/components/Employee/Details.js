@@ -1,7 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {getEmployeeById} from '../../store/Actions/employeeAction'
 import {Redirect} from 'react-router-dom'
+import PropTypes from 'prop-types'
+import {getEmployeeById} from '../../store/Actions/employeeAction'
+
 
 const Details = props => {
     
@@ -29,36 +31,36 @@ const Details = props => {
                     </span>
                 </div>
                 <div className='card-content col s12 m12'>
-                    <p>
+                    <span>
                         <h5>About</h5>
                         <article>{employeeData.about}</article>
-                    </p>
+                    </span>
                 </div>
                 <div className='card-content col s12 m6'>
-                    <p>
+                    <span>
                         <h5>Company</h5>
                         <article>{employeeData.company}</article>
-                    </p>
+                    </span>
                 </div>
                 <div className='card-content col s12 m6'>
-                    <p>
+                    <span>
                         <h5>Email</h5>
                         <article>{employeeData.email}</article>
-                    </p>
+                    </span>
                 </div>
                 <div className='card-content col s12 m6'>
-                    <p>
+                    <span>
                         <h5>Phone</h5>
                         <article>{employeeData.phone}</article>
-                    </p>
+                    </span>
                 </div>
                 <div className='card-content col s12 m6'>
-                    <p>
+                    <span>
                     <h5>Address</h5>
                         <article>{employeeData.address}</article>
-                    </p>
+                    </span>
                 </div>
-                <div class="card-content col s12 m12">
+                <div className="card-content col s12 m12">
                    <small className='blue-text'>Created On {employeeData.createdOn}</small> 
                 </div>
             </div>
@@ -80,5 +82,10 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-
+Details.propTypes={
+    match: PropTypes.object.isRequired,
+    getEmployee: PropTypes.func.isRequired,
+    profile: PropTypes.object.isRequired,
+    employee:PropTypes.object.isRequired
+}
 export default connect(mapStateToProps, mapDispatchToProps)(Details)

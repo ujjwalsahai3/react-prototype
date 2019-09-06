@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Paging = props => {
     const pages= props.pages
@@ -23,4 +24,9 @@ const Paging = props => {
     )
 }
 
+Paging.propTypes = {
+    onNextAndForwardClick: PropTypes.func.isRequired,
+    onPageClick: PropTypes.func.isRequired,
+    pages: PropTypes.arrayOf(PropTypes.number)
+}
 export default Paging

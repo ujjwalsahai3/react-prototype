@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
-import {authenticateUser} from '../../store/Actions/userActions'
 import {Redirect} from 'react-router-dom'
+import PropTypes from 'prop-types'
+import {authenticateUser} from '../../store/Actions/userActions'
 import {GlobalConst} from '../../constants/globalConstants'
 
 const Login = props => {
@@ -31,7 +32,6 @@ const Login = props => {
         return <Redirect to='/' />
     }
         
-
     return (
         <div className='container white'>
             <form onSubmit={onSubmitHandler}> 
@@ -64,6 +64,12 @@ const mapDispatchToProps= (dispatch) => {
     return {
         authenticateUser: (credentials) => {dispatch(authenticateUser(credentials))}
     }
+}
+
+Login.propTypes ={
+    errorMessage: PropTypes.string,
+    profile:PropTypes.object,
+    authenticateUser: PropTypes.func
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

@@ -1,9 +1,10 @@
 import React , {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
-import {employees} from '../../store/Actions/employeeAction'
+import PropTypes from 'prop-types'
 import Preloader from '../Utility/Loader'
 import Table from '../Utility/Table'
+import {employees} from '../../store/Actions/employeeAction'
 
 const Employees = props => {
     const [isLoading, setIsLoading]= useState(true)
@@ -61,5 +62,10 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
+
+Employees.propTypes  = {
+    profile: PropTypes.object,
+    employees: PropTypes.array
+}
 
 export default connect(mapStateToProps,mapDispatchToProps)(Employees)

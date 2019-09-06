@@ -1,28 +1,31 @@
 import React, {useState, useEffect} from 'react'
 import Paging from './paging'
 import {Link} from 'react-router-dom'
-
+import Preloader from '../Loader'
+import PropTypes from 'prop-types'
 const Table = props => {
-    const [state, setState] = useState({originalData:[],pageNumber:1,numberOfRecords:5, data:[], totalPages:0})
-    
-    const fetchStateData= (data) => {
-        const initialIndex = (state.pageNumber - 1) * state.numberOfRecords
-            setState({
-                ...state,
-                originalData:data,
-                totalPages: Math.ceil(data.length/state.numberOfRecords),
-                data: data.slice(initialIndex, state.numberOfRecords)
-            })
-    }
-    
-    //eslint-disable-next-line
-    useEffect(()=>{
-        if(props.tablebody.length > 0){
-            fetchStateData(props.tablebody)
-        }
-    },[])
+    const [state, setState] = useState({})
+    const [isloading,setIsLoading] = useState(true)
 
-    const onPageClick =(page) => {
+    useEffect(()=>{
+        if(isloading){
+            if(props.tablebody.length > 0 ){
+                const pageNumber= 1
+                const recordsToDisplay=5
+                const initialIndex = (pageNumber - 1) * recordsToDisplay
+                setState({
+                    pageNumber: pageNumber,
+                    numberOfRecords: recordsToDisplay,
+                    originalData:props.tablebody,
+                    totalPages: Math.ceil(props.tablebody.length/recordsToDisplay),
+                    data: props.tablebody.slice(initialIndex, recordsToDisplay)
+                })
+                setIsLoading(false)
+            }
+        }
+    },[props.tablebody,isloading])
+
+    const addAndRemoveActiveClass = (page) =>{
         let paginationContainer = document.querySelector('#paginationContainer')
         for (var i=0; i<paginationContainer.children.length; i++) {
             paginationContainer.children[i].classList.remove('active')
@@ -30,35 +33,30 @@ const Table = props => {
             if(paginationContainer.children[i].id === ('li'+page))
                 paginationContainer.children[i].classList.add('active')
         } 
+    }
 
-        const initialIndex = (page - 1) * state.numberOfRecords
-        const displayData= state.originalData.slice(initialIndex, initialIndex+state.numberOfRecords)
-        //console.log(displayData, initialIndex)
+    const onPageClick =(page) => {
+        addAndRemoveActiveClass(page)
         setState({
             ...state,
             pageNumber: page,
-            data: displayData
+            data: state.originalData.slice((page - 1) * state.numberOfRecords, (page - 1) * state.numberOfRecords+state.numberOfRecords)
         })
     }
     
-    const onMoveNextAndForward = value => {
+    const onNextAndPreview = value => {
         let pageNumber = state.pageNumber + value
-        if(pageNumber===0)
-            pageNumber = state.totalPages
-        if(pageNumber > state.totalPages)
-            pageNumber = 1
-
+        pageNumber = pageNumber === 0 ? state.totalPages : (pageNumber > state.totalPages ? 1 : pageNumber)
         onPageClick(Number(pageNumber))
     }
-
-    
 
     let pageArr =[]
     for (let index = 1; index <= state.totalPages; index++) {
        pageArr.push(index)
     }
-   
-    return (
+
+    const dynamicContent = isloading ? (<Preloader />) :
+     (
         <>
         <div className='row'>
             <div className='col s4 offset-s4 orange lighten-4 center-align' style={{padding:10}}>
@@ -69,7 +67,6 @@ const Table = props => {
             <thead>
                 <tr>
                     {props.tableheader.map(head => <th key={head.title}>{head.title}</th>)}
-                   
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -89,10 +86,17 @@ const Table = props => {
                 )}
             </tbody>
         </table>
-        <Paging pages={pageArr} onPageClick={onPageClick} onNextAndForwardClick={onMoveNextAndForward} />
+        <Paging pages={pageArr} onPageClick={onPageClick} onNextAndForwardClick={onNextAndPreview} />
         </>
     )
+
+    return dynamicContent
 }
 
+Table.propTypes = {
+    tablebody: PropTypes.array.isRequired,
+    tableheader: PropTypes.array.isRequired,
+    redirectToRoute:PropTypes.string.isRequired,
 
+}
 export default Table
