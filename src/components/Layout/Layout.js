@@ -1,15 +1,19 @@
 import React from 'react'
 import Navbar from '../Navbar/Navbar'
-
+import ErrorHandling from '../Error/ErrorHandling'
 const Layout = (props) =>{
     return (
         <div>
             <header>
-                <Navbar />
+                <ErrorHandling>
+                    <Navbar />
+                </ErrorHandling>
             </header>
             <main>
                 <div className='container dashboard'>
+                    <ErrorHandling>
                         {props.children}
+                    </ErrorHandling>
                 </div>
             </main>
         </div>
