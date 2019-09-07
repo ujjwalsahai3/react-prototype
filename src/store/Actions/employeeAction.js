@@ -11,6 +11,11 @@ export const getEmployeeById = (id) => {
     return {type:ActionTypes.Employee_Data_By_Id, payload: selectedEmployee[0]}
 }
 
+export const getEmployeeDataByFilter = (tag,orderBy) => {
+    const empsData= getEmployeeData(tag,orderBy);
+    return {type:ActionTypes.Employees_Data, payload: empsData}
+}
+
 const getEmployeeData =(sortBy, orderBy) => {
     if(orderBy === 'DESC')
     {

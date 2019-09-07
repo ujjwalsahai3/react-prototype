@@ -4,7 +4,7 @@ import {Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Preloader from '../Utility/Loader'
 import Table from '../Utility/Table'
-import {employees} from '../../store/Actions/employeeAction'
+import {employees, getEmployeeDataByFilter} from '../../store/Actions/employeeAction'
 
 const Employees = props => {
     const [isLoading, setIsLoading]= useState(true)
@@ -12,18 +12,21 @@ const Employees = props => {
 
 
     useEffect(()=>{
+        console.log("fire",props.employees)
+        if(employeeData.length===0)
+            props.getAllEmployees()
         setIsLoading(true);
         if(props.employees.length){
             setEmployeeData(props.employees)
             setIsLoading(false)
         }
-    },[props.employees])
+    },[props.employees,isLoading])
 
-    props.getAllEmployees()
+    
     if(props.profile.id === undefined)
             return <Redirect to='/login' />
 
-    const headerContent = [{title:'Name'}, {title:'Company'}, {title:'Email'}, {title: 'Phone'}]
+    const headerContent = [{title:'Name', tags:'firstName'}, {title:'Company',tags:'company'}, {title:'Email', tags:'email'}, {title: 'Phone',tags:'phone'}]
     const bodyContent = employeeData.map(employee =>{
         return {
             uniqueKey: employee.id,
@@ -37,9 +40,14 @@ const Employees = props => {
         }
     })
 
+    const fnFilter = (obj) =>{
+        //console.log(obj)
+        props.getEmployeeByFilter(obj.tag,obj.order)
+        setIsLoading(true)
+    }
     
 
-    const dynamicContent = isLoading ? <Preloader /> : <Table tableheader={headerContent} tablebody={bodyContent} redirectToRoute="/employee/" />
+    const dynamicContent = isLoading ? <Preloader /> : <Table tableheader={headerContent} tablebody={bodyContent} redirectToRoute="/employee/" fnFilter={fnFilter} />
     return (
         <div className='section white employees-container'>
                 <h5>Employee Details</h5>
@@ -58,14 +66,17 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAllEmployees: () => {dispatch(employees())}
+        getAllEmployees: () => {dispatch(employees())},
+        getEmployeeByFilter: (tag,orderBy) => {dispatch(getEmployeeDataByFilter(tag,orderBy))}
+
     }
 }
 
 
 Employees.propTypes  = {
     profile: PropTypes.object,
-    employees: PropTypes.array
+    employees: PropTypes.array,
+    getEmployeeByFilter: PropTypes.func
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(Employees)

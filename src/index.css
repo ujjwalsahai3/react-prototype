@@ -48,3 +48,13 @@ form button, form h5 {
 .card-content{
   background: #fff
 }
+
+select{
+  height:100%; 
+  padding: 0px;
+}
+
+option {
+  padding: 0px;
+  font-size: 14px
+}

@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import Paging from './paging'
 import {Link} from 'react-router-dom'
 import Preloader from '../Loader'
+import TableHeader from './header'
+import Paging from './paging'
 import PropTypes from 'prop-types'
+
 const Table = props => {
     const [state, setState] = useState({})
     const [isloading,setIsLoading] = useState(true)
@@ -58,11 +60,7 @@ const Table = props => {
     const dynamicContent = isloading ? (<Preloader />) :
      (
         <>
-        <div className='row'>
-            <div className='col s4 offset-s4 orange lighten-4 center-align' style={{padding:10}}>
-                Viewing Page: {state.pageNumber}/{state.totalPages}
-            </div>
-        </div>
+        <TableHeader pageNumber={state.pageNumber} totalPages={state.totalPages} filterByTags={props.tableheader} fnFilter={props.fnFilter}/>
         <table className='table responsive-table striped'>
             <thead>
                 <tr>
@@ -97,6 +95,7 @@ Table.propTypes = {
     tablebody: PropTypes.array.isRequired,
     tableheader: PropTypes.array.isRequired,
     redirectToRoute:PropTypes.string.isRequired,
+    fnFilter:PropTypes.func.isRequired
 
 }
 export default Table
